@@ -1,0 +1,19 @@
+export async function clickToggleOnPlaybackMenu(driver: WebDriver, buttonId: string, on: boolean) : Promise<void> {
+  const buttonToggle = await driver.wait(until.elementLocated(By.css(`[data-test-id="${buttonId}"]`)), 10000);
+  await waitElementEnabled(driver, `[data-test-id="${buttonId}"]`);
+  await waitElementDisplayed(driver, `[data-test-id="${buttonId}"]`);
+  const buttonToggleDiv = await buttonToggle.findElement(By.css('div[class]'));
+  const buttonToggleClass = await buttonToggleDiv.getAttribute('class');
+  if (on) {
+    if (buttonToggleClass.includes('bg-muted')) {
+      // toggle on the button
+      await buttonToggle.click();
+    }
+  } else {
+    if (buttonToggleClass.includes('bg-bright-100')) {
+      // toggle off the button
+      await buttonToggle.click();
+    }
+  }
+  expect(await buttonToggleClass.includes(on ? 'bg-bright-100' : 'bg-muted'));
+}
